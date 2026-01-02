@@ -81,7 +81,7 @@ export function Hero() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.7, delay: 0.2 }}
-                        className="relative hidden lg:block"
+                        className="relative block mt-12 lg:mt-0"
                     >
                         <div className="relative w-full aspect-square max-w-[500px] ml-auto">
                             {/* Background blob/glow */}
