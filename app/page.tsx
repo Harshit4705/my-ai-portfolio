@@ -5,6 +5,7 @@ import { Projects } from '@/components/Projects';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { TechStack } from '@/components/TechStack';
+import { Chatbot } from '@/components/Chatbot';
 
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
 
@@ -21,6 +22,7 @@ export default function Home() {
         <Contact />
       </div>
       <Footer />
+      <Chatbot />
     </main>
   );
 }
