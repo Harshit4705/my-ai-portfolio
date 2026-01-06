@@ -76,15 +76,16 @@ export function Chatbot() {
     };
 
     // Dynamic sizing
-    const chatWidth = isExpanded ? "w-[600px]" : "w-[420px]";
-    const chatHeight = isExpanded ? "h-[700px]" : "h-[600px]";
+    // Dynamic sizing
+    const chatWidth = isExpanded ? "md:w-[600px]" : "md:w-[420px]";
+    const chatHeight = isExpanded ? "md:h-[700px]" : "md:h-[600px]";
 
     return (
         <>
             {/* Floating Chat Button with pulse animation */}
             <motion.button
                 onClick={() => setIsOpen(true)}
-                className={`fixed bottom-6 right-6 z-50 p-5 rounded-full text-white shadow-2xl ${isOpen ? "hidden" : "flex"
+                className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 p-4 md:p-5 rounded-full text-white shadow-2xl ${isOpen ? "hidden" : "flex"
                     }`}
                 style={{
                     background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
@@ -132,7 +133,7 @@ export function Chatbot() {
                         animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                         exit={{ opacity: 0, y: 50, scale: 0.8, rotateX: 20 }}
                         transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
-                        className={`fixed bottom-6 right-6 z-50 ${chatWidth} ${chatHeight} flex flex-col rounded-3xl overflow-hidden shadow-2xl transition-all duration-300`}
+                        className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100vw-2rem)] h-[80vh] ${chatWidth} ${chatHeight} flex flex-col rounded-3xl overflow-hidden shadow-2xl transition-all duration-300`}
                         style={{
                             background: "rgba(10, 10, 10, 0.95)", // Darker, more neutral background
                             border: "1px solid rgba(255,255,255,0.1)",
@@ -200,7 +201,7 @@ export function Chatbot() {
                             <div className="flex items-center gap-2">
                                 <motion.button
                                     onClick={() => setIsExpanded(!isExpanded)}
-                                    className="p-2 rounded-xl hover:bg-white/10 transition-colors text-purple-300 hover:text-white"
+                                    className="hidden md:block p-2 rounded-xl hover:bg-white/10 transition-colors text-purple-300 hover:text-white"
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                 >
@@ -229,8 +230,8 @@ export function Chatbot() {
                                 >
                                     <motion.div
                                         className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${message.role === "user"
-                                                ? "bg-gradient-to-br from-blue-500 to-cyan-400"
-                                                : "bg-gradient-to-br from-purple-600 to-pink-500"
+                                            ? "bg-gradient-to-br from-blue-500 to-cyan-400"
+                                            : "bg-gradient-to-br from-purple-600 to-pink-500"
                                             }`}
                                         whileHover={{ scale: 1.1, rotate: 5 }}
                                     >
@@ -242,8 +243,8 @@ export function Chatbot() {
                                     </motion.div>
                                     <motion.div
                                         className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${message.role === "user"
-                                                ? "bg-gradient-to-br from-blue-600 to-cyan-500 text-white rounded-br-md"
-                                                : "bg-white/5 border border-white/10 text-gray-100 rounded-bl-md"
+                                            ? "bg-gradient-to-br from-blue-600 to-cyan-500 text-white rounded-br-md"
+                                            : "bg-white/5 border border-white/10 text-gray-100 rounded-bl-md"
                                             }`}
                                         whileHover={{ scale: 1.01 }}
                                     >
