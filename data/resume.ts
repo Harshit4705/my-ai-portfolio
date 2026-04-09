@@ -92,6 +92,14 @@ export const resumeData = {
             description: "Built transformer-based language model from scratch implementing attention mechanisms from research papers. Trained on TinyStories dataset and deployed interactive demo on Hugging Face Spaces using Gradio.",
             link: "https://huggingface.co/spaces/Harshit4705/AI-Story-Generator",
             image: "/project-story.png"
+        },
+        {
+            title: "HairTry: Virtual Hair Color App",
+            tech: ["React", "Computer Vision", "AI Segmentation", "Netlify"],
+            date: "Mar 2026",
+            description: "AI-powered virtual hair colour try-on web app using real-time hair segmentation. Features custom TinyHair v2 model for precise hair region detection, offering live webcam preview and photo upload with adjustable intensity and shade selection.",
+            link: "https://incomparable-shortbread-e533df.netlify.app",
+            image: "/project-hairtry.png"
         }
     ],
     achievements: [
