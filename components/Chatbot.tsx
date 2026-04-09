@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Brain, User, Sparkles, Maximize2, Minimize2 } from "lucide-react";
+import { MessageCircle, X, Send, Brain, User, Sparkles, Maximize2, Minimize2, Zap, Code, Briefcase, Github } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -19,11 +19,13 @@ export function Chatbot() {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: "assistant",
-            content: "Hey there! ✨ I'm **Harshit's AI assistant**. Ask me anything about his skills, projects, or experience!",
+            content: "Hey there! ✨ I'm **Harshit's AI assistant**. Ask me anything about his skills, projects, or experience!\n\nTry the quick buttons below 👇",
         },
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [backendStatus, setBackendStatus] = useState<"unknown" | "waking" | "ready">("unknown");
+    const [hasWarmedUp, setHasWarmedUp] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -34,35 +36,73 @@ export function Chatbot() {
         scrollToBottom();
     }, [messages]);
 
+    // Warm up backend on page load (before user even opens chat)
+    useEffect(() => {
+        if (hasWarmedUp) return;
+        
+        const warmUp = async () => {
+            try {
+                setBackendStatus("waking");
+                const response = await fetch(`${API_URL}/health`, { 
+                    method: "GET",
+                    signal: AbortSignal.timeout(15000)
+                });
+                if (response.ok) {
+                    setBackendStatus("ready");
+                    setHasWarmedUp(true);
+                }
+            } catch {
+                // Backend might be cold-starting, try again after a delay
+                setTimeout(async () => {
+                    try {
+                        const retryResponse = await fetch(`${API_URL}/health`, {
+                            method: "GET",
+                            signal: AbortSignal.timeout(30000)
+                        });
+                        if (retryResponse.ok) {
+                            setBackendStatus("ready");
+                            setHasWarmedUp(true);
+                        }
+                    } catch {
+                        setBackendStatus("unknown");
+                    }
+                }, 5000);
+            }
+        };
+
+        warmUp();
+    }, [hasWarmedUp]);
+
     // Show response directly (no character streaming to avoid garbled text)
     const showResponse = useCallback((fullText: string) => {
         setMessages((prev) => [...prev, { role: "assistant", content: fullText }]);
         setIsLoading(false);
     }, []);
 
-    const sendMessage = async () => {
-        if (!input.trim() || isLoading) return;
+    const sendMessage = async (messageText?: string) => {
+        const text = messageText || input.trim();
+        if (!text || isLoading) return;
 
-        const userMessage = input.trim();
-        setInput("");
-        setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+        if (!messageText) setInput("");
+        setMessages((prev) => [...prev, { role: "user", content: text }]);
         setIsLoading(true);
 
         try {
             const response = await fetch(`${API_URL}/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: userMessage }),
+                body: JSON.stringify({ query: text }),
             });
 
             if (!response.ok) throw new Error("Failed to get response");
 
             const data = await response.json();
+            setBackendStatus("ready");
             showResponse(data.response);
         } catch (error) {
             setMessages((prev) => [
                 ...prev,
-                { role: "assistant", content: "⚠️ Sorry, I couldn't connect to the server. Please try again later." },
+                { role: "assistant", content: "⚠️ Sorry, I couldn't connect to the server. The AI might be waking up — please try again in a moment!" },
             ]);
             setIsLoading(false);
         }
@@ -75,7 +115,14 @@ export function Chatbot() {
         }
     };
 
-    // Dynamic sizing
+    // Quick action buttons
+    const quickActions = [
+        { label: "Skills", icon: Zap, query: "What are Harshit's technical skills?" },
+        { label: "Projects", icon: Code, query: "Tell me about Harshit's projects" },
+        { label: "Experience", icon: Briefcase, query: "What is Harshit's work experience?" },
+        { label: "GitHub", icon: Github, query: "Show me Harshit's GitHub stats" },
+    ];
+
     // Dynamic sizing
     const chatWidth = isExpanded ? "md:w-[600px]" : "md:w-[420px]";
     const chatHeight = isExpanded ? "md:h-[700px]" : "md:h-[600px]";
@@ -135,7 +182,7 @@ export function Chatbot() {
                         transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
                         className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100vw-2rem)] h-[80vh] ${chatWidth} ${chatHeight} flex flex-col rounded-3xl overflow-hidden shadow-2xl transition-all duration-300`}
                         style={{
-                            background: "rgba(10, 10, 10, 0.95)", // Darker, more neutral background
+                            background: "rgba(10, 10, 10, 0.95)",
                             border: "1px solid rgba(255,255,255,0.1)",
                             backdropFilter: "blur(20px)",
                         }}
@@ -161,7 +208,7 @@ export function Chatbot() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                             style={{
-                                background: "rgba(30, 30, 30, 0.5)", // Neutral dark header
+                                background: "rgba(30, 30, 30, 0.5)",
                             }}
                         >
                             <div className="flex items-center gap-3">
@@ -190,11 +237,11 @@ export function Chatbot() {
                                     <h3 className="font-bold text-white text-lg">AI Assistant</h3>
                                     <p className="text-xs text-purple-300 flex items-center gap-1">
                                         <motion.span
-                                            className="w-2 h-2 bg-green-400 rounded-full"
+                                            className={`w-2 h-2 rounded-full ${backendStatus === "ready" ? "bg-green-400" : backendStatus === "waking" ? "bg-yellow-400" : "bg-gray-400"}`}
                                             animate={{ scale: [1, 1.3, 1] }}
                                             transition={{ duration: 1.5, repeat: Infinity }}
                                         />
-                                        Always online
+                                        {backendStatus === "ready" ? "Online & ready" : backendStatus === "waking" ? "Waking up..." : "Connecting..."}
                                     </p>
                                 </div>
                             </div>
@@ -268,6 +315,29 @@ export function Chatbot() {
                                 </motion.div>
                             ))}
 
+                            {/* Quick Action Buttons - show only after first message */}
+                            {messages.length === 1 && !isLoading && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="flex flex-wrap gap-2 pl-13"
+                                >
+                                    {quickActions.map((action) => (
+                                        <motion.button
+                                            key={action.label}
+                                            onClick={() => sendMessage(action.query)}
+                                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-purple-200 hover:bg-purple-500/20 hover:border-purple-400/30 hover:text-white transition-all"
+                                            whileHover={{ scale: 1.05, y: -2 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <action.icon className="w-3.5 h-3.5" />
+                                            {action.label}
+                                        </motion.button>
+                                    ))}
+                                </motion.div>
+                            )}
+
                             {/* Typing Indicator */}
                             {isLoading && (
                                 <motion.div
@@ -278,18 +348,25 @@ export function Chatbot() {
                                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center">
                                         <Brain className="w-5 h-5 text-white" />
                                     </div>
-                                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-md flex gap-1.5">
-                                        {[0, 1, 2].map((i) => (
-                                            <motion.span
-                                                key={i}
-                                                className="w-2.5 h-2.5 rounded-full"
-                                                style={{
-                                                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                                                }}
-                                                animate={{ y: [-3, 3, -3] }}
-                                                transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
-                                            />
-                                        ))}
+                                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-md">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex gap-1.5">
+                                                {[0, 1, 2].map((i) => (
+                                                    <motion.span
+                                                        key={i}
+                                                        className="w-2.5 h-2.5 rounded-full"
+                                                        style={{
+                                                            background: "linear-gradient(135deg, #667eea, #764ba2)",
+                                                        }}
+                                                        animate={{ y: [-3, 3, -3] }}
+                                                        transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span className="text-xs text-purple-300/60 ml-2">
+                                                {backendStatus !== "ready" ? "Waking up AI..." : "Thinking..."}
+                                            </span>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
@@ -318,7 +395,7 @@ export function Chatbot() {
                                     whileFocus={{ scale: 1.01 }}
                                 />
                                 <motion.button
-                                    onClick={sendMessage}
+                                    onClick={() => sendMessage()}
                                     disabled={isLoading || !input.trim()}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

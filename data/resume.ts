@@ -4,11 +4,12 @@ export const resumeData = {
     email: "harshitchawlawork@gmail.com",
     phone: "+91-9560700282",
     location: "Delhi, India",
+    portfolio: "https://harshitchawla.vercel.app",
     links: {
         linkedin: "https://linkedin.com/in/harshitchawla4705",
         github: "https://github.com/Harshit4705",
     },
-    summary: "Aspiring AI/ML Engineer and final-year BCA student with hands-on experience in LangChain, PyTorch, and Computer Vision. Proven track record of building production-ready applications, including RAG systems, agentic AI workflows, and real-time detection models. Passionate about leveraging transformer architectures and LLM frameworks to automate complex research and business processes.",
+    summary: "Aspiring AI/ML Engineer with hands-on experience in LangChain, PyTorch, and Hugging Face, building production-ready applications in RAG systems, agentic AI, and computer vision. Passionate about leveraging transformer architectures and LLM frameworks to create intelligent, scalable solutions that solve real-world problems and research automation.",
     education: [
         {
             school: "Institute of Information Technology and Management (GGSIPU)",
@@ -27,47 +28,68 @@ export const resumeData = {
     ],
     experience: [
         {
+            role: "Freelance AI Developer",
+            company: "NexAdvent Digital Solutions",
+            date: "Feb 2026 – Mar 2026",
+            location: "Remote",
+            description: [
+                "Built HairTry – an AI-powered virtual hair colour try-on web app using real-time hair segmentation.",
+                "Implemented custom TinyHair v2 segmentation model for precise hair region detection and colour overlay.",
+                "Delivered webcam-based live preview and photo upload with adjustable colour intensity and shade selection.",
+                "Deployed demo app on Netlify with before/after slider comparison and one-click image download."
+            ]
+        },
+        {
             role: "AI & ML Trainee",
             company: "ShapeMySkills Pvt. Ltd.",
             date: "June 2025 – July 2025",
             location: "New Delhi, India",
             description: [
-                "Engineered an AI-powered waste classification system using YOLOv8 and computer vision to automate sorting processes.",
-                "Developed deep learning models for image classification (CIFAR-10) using custom CNN architectures.",
-                "Built predictive models for rental demand forecasting, achieving 85%+ accuracy through hyperparameter tuning.",
-                "Collaborated on code reviews and optimized model inference time for real-world deployment scenarios."
+                "Developed machine learning models for rental demand forecasting, achieving 85%+ prediction accuracy.",
+                "Built deep learning image classification system using CIFAR-10 dataset with CNN architectures.",
+                "Engineered AI-powered waste classification system using computer vision and YOLOv8 for automated sorting.",
+                "Collaborated in code reviews and optimized model performance through hyperparameter tuning."
             ]
         }
     ],
     skills: {
-        languages: ["Python", "SQL", "JavaScript", "TypeScript", "HTML/CSS"],
-        frameworks: ["PyTorch", "TensorFlow", "LangChain", "LangGraph", "YOLOv8", "Scikit-learn", "Transformers"],
-        backend: ["FastAPI", "REST APIs", "Vector Databases (FAISS, ChromaDB)", "WebSocket"],
-        frontend: ["Next.js", "React", "Git", "Docker", "Streamlit", "Hugging Face Spaces"],
-        concepts: ["Retrieval-Augmented Generation (RAG)", "Agentic AI", "Computer Vision", "NLP"]
+        languages: ["Python", "JavaScript", "TypeScript", "SQL", "HTML/CSS"],
+        frameworks: ["TensorFlow", "PyTorch", "scikit-learn", "LangChain", "LangGraph", "Transformers", "YOLOv8"],
+        backend: ["FastAPI", "REST APIs", "WebSocket", "Vector Databases (FAISS, ChromaDB)"],
+        frontend: ["Next.js", "React", "Tailwind CSS", "Streamlit"],
+        tools: ["Git", "BeautifulSoup", "RAG Systems", "LLM APIs (Gemini, Groq)", "Gradio", "Docker"],
+        concepts: ["Computer Vision", "NLP", "Agentic AI", "Real-Time Detection", "Retrieval-Augmented Generation"]
     },
     projects: [
         {
             title: "AI-Researcher",
-            tech: ["FastAPI", "LangChain", "Next.js", "FAISS"],
+            tech: ["FastAPI", "LangChain", "Next.js", "FAISS", "RAG"],
             date: "Nov 2025",
-            description: "Developed a full-stack research assistant featuring project-specific PDF workspaces and ArXiv paper integration. Implemented a RAG pipeline using FAISS vector store. Engineered streaming responses and a drag-and-drop interface.",
+            description: "Built AI-powered research assistant with project-specific PDF workspaces and conversational interface. Implemented RAG pipeline with FAISS vector store and embeddings for grounded, contextual answers. Integrated FastAPI backend with Next.js frontend for real-time document analysis and citation tracking.",
             link: "https://github.com/Harshit4705/AI-Researcher",
             image: "/project-researcher.png"
+        },
+        {
+            title: "Movie Recommender App",
+            tech: ["Python", "Scikit-learn", "TF-IDF", "Cosine Similarity"],
+            date: "Mar 2026",
+            description: "Built a content-based movie recommendation system using supervised machine learning with TF-IDF Vectorization and Cosine Similarity. Provides personalized movie suggestions based on content features like genre, cast, and plot keywords.",
+            link: "https://github.com/Harshit4705/movie-recommender-app",
+            image: "/project-movie-recommender.png"
         },
         {
             title: "Code Review Agent",
             tech: ["LangGraph", "GitHub API", "Static Analysis"],
             date: "Aug 2025",
-            description: "Architected an autonomous agent using LangGraph to perform multi-step code analysis workflows. Automated the detection of security vulnerabilities and code quality metrics, integrating results directly into GitHub PRs.",
+            description: "Engineered automated code review system using LangGraph for multi-step analysis workflows. Implemented security vulnerability detection, code quality metrics, and best practice recommendations integrated directly into GitHub PRs.",
             link: "https://github.com/Harshit4705/Code-Review-Agent",
             image: "/project-code-review.png"
         },
         {
             title: "Custom GPT Language Model",
-            tech: ["PyTorch", "Transformers"],
+            tech: ["PyTorch", "Transformers", "Hugging Face"],
             date: "June 2025",
-            description: "Built a decoder-only transformer model from scratch, implementing multi-head attention and positional encodings. Trained on the TinyStories dataset and deployed on Hugging Face Spaces.",
+            description: "Built transformer-based language model from scratch implementing attention mechanisms from research papers. Trained on TinyStories dataset and deployed interactive demo on Hugging Face Spaces using Gradio.",
             link: "https://huggingface.co/spaces/Harshit4705/AI-Story-Generator",
             image: "/project-story.png"
         }
